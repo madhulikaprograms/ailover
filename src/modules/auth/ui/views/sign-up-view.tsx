@@ -195,7 +195,7 @@ export const SignUpView = () => {
                 {/* Sign in link */}
                 <div className="text-center text-sm">
                   Already have an account?{" "}
-                  <Link href="/sign-in" className="text-blue-600 hover:underline">
+                  <Link href="/" className="text-blue-600 hover:underline">
                     Sign in
                   </Link>
                 </div>
