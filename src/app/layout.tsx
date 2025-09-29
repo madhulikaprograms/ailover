@@ -25,6 +25,7 @@ export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
       <body
+        suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <div className = "bg-muted flex min-h-svh flex-col items-center justify-center p-6 md:p-10">
