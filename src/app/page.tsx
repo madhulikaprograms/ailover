@@ -1,5 +1,16 @@
-import { SignInView } from "@/modules/auth/ui/views/sign-in-view";
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { session } from "@/lib/auth-client";
 
 export default function Page() {
-  return <SignInView />;
+  const router = useRouter();
+  useEffect(() => {
+    if (session.isLoggedIn()) {
+      router.replace("/chat");
+    } else {
+      router.replace("/sign-in");
+    }
+  }, [router]);
+  return null;
 }
