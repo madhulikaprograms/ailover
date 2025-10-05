@@ -13,7 +13,7 @@ export async function POST(request: Request) {
       success: true,
       user: { id: "1", name, email },
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ success: false, error: "Invalid request" }, { status: 400 });
   }
 }

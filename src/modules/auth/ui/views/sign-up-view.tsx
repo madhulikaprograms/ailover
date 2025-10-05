@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { OctagonAlertIcon } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -56,9 +57,9 @@ export const SignUpView = () => {
       await authClient.signUp(data.name, data.email, data.password);
       setPending(false);
       router.push("/chat");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Unexpected signup error:", err);
-      setError(err.message || "Something went wrong");
+      setError(err instanceof Error ? err.message : "Something went wrong");
       setPending(false);
     }
   };
@@ -189,7 +190,7 @@ export const SignUpView = () => {
 
           {/* Right side panel */}
           <div className="bg-gradient-to-br from-red-700 to-purple-900 relative hidden md:flex flex-col gap-y-4 items-center justify-center">
-            <img src="/logo.svg" alt="Image" className="h-[150px] w-[150px]" />
+            <Image src="/logo.svg" alt="AILOVER Logo" width={150} height={150} />
             <p className="text-2xl font-semibold text-white">Meet.AI</p>
           </div>
         </CardContent>
