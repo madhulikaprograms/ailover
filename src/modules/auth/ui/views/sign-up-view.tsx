@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import { authClient } from "@/lib/auth-client"; // your custom client
+import { authClient } from "@/lib/auth-client"; // mock client
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertTitle } from "@/components/ui/alert";
@@ -48,30 +48,14 @@ export const SignUpView = () => {
     },
   });
 
-  // ✅ Fixed onSubmit for custom client
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setError(null);
     setPending(true);
 
     try {
-      await authClient.signUp.email(
-        {
-          name: data.name,
-          email: data.email,
-          password: data.password,
-        },
-        {
-          onSuccess: () => {
-            setPending(false);
-            router.push("/"); // redirect to homepage after signup
-          },
-          onError: (err: any) => {
-            console.error("Signup error:", err);
-            setPending(false);
-            setError(err.message || "Something went wrong");
-          },
-        }
-      );
+      await authClient.signUp(data.name, data.email, data.password);
+      setPending(false);
+      router.push("/chat");
     } catch (err: any) {
       console.error("Unexpected signup error:", err);
       setError(err.message || "Something went wrong");
@@ -195,7 +179,7 @@ export const SignUpView = () => {
                 {/* Sign in link */}
                 <div className="text-center text-sm">
                   Already have an account?{" "}
-                  <Link href="/sign-in" className="text-blue-600 hover:underline">
+                  <Link href="/" className="text-blue-600 hover:underline">
                     Sign in
                   </Link>
                 </div>

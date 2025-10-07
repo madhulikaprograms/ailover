@@ -42,22 +42,14 @@ export const SignInView = () => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setError(null);
     setPending(true);
-    authClient.signIn.email(
-      {
-        email: data.email,
-        password: data.password,
-      },
-      {
-        onSuccess: () => {
-          setPending(false);
-          router.push("/");
-        },
-        onError: (error: any) => {
-          setPending(false);
-          setError(error.message || "Something went wrong");
-        },
-      }
-    );
+    try {
+      await authClient.signIn(data.email, data.password);
+      setPending(false);
+      router.push("/chat");
+    } catch (e: any) {
+      setPending(false);
+      setError(e?.message || "Something went wrong");
+    }
   };
 
   return (
@@ -155,7 +147,7 @@ export const SignInView = () => {
                 <div className="text-center text-sm">
                   Don&apos;t have an account?{" "}
                   <Link
-                    href="/auth/sign-up"
+                    href="/sign-up"
                     className="text-blue-600 hover:underline"
                   >
                     Sign up
