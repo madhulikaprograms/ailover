@@ -9,7 +9,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
+import { motion } from "framer-motion";
 import { authClient } from "@/lib/auth-client"; // mock client
+import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertTitle } from "@/components/ui/alert";
@@ -55,6 +57,8 @@ export const SignUpView = () => {
 
     try {
       await authClient.signUp(data.name, data.email, data.password);
+      const res = await signIn("credentials", { email: data.email, password: data.password, redirect: false });
+      if (res?.error) throw new Error(res.error);
       setPending(false);
       router.push("/chat");
     } catch (err: unknown) {
@@ -65,7 +69,12 @@ export const SignUpView = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="flex flex-col gap-6"
+    >
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
           <Form {...form}>
@@ -189,10 +198,15 @@ export const SignUpView = () => {
           </Form>
 
           {/* Right side panel */}
-          <div className="bg-gradient-to-br from-red-700 to-purple-900 relative hidden md:flex flex-col gap-y-4 items-center justify-center">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.15, duration: 0.5 }}
+            className="bg-gradient-to-br from-red-700 to-purple-900 relative hidden md:flex flex-col gap-y-4 items-center justify-center"
+          >
             <Image src="/logo.svg" alt="AILOVER Logo" width={150} height={150} />
             <p className="text-2xl font-semibold text-white">Meet.AI</p>
-          </div>
+          </motion.div>
         </CardContent>
       </Card>
 
@@ -200,7 +214,7 @@ export const SignUpView = () => {
         By clicking continue, you agree to our{" "}
         <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
