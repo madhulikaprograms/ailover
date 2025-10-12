@@ -138,6 +138,11 @@ export const SignInView = () => {
                     variant="outline"
                     type="button"
                     className="w-full"
+                    onClick={() => {
+                      // Replace with the correct Google OAuth call for your client
+                      authClient?.signInWithProvider("google");
+                    
+                    }}
                   >
                     Google
                   </Button>
@@ -146,6 +151,10 @@ export const SignInView = () => {
                     variant="outline"
                     type="button"
                     className="w-full"
+                    onClick={() => {
+                      // ✅ Fixed GitHub OAuth call
+                      authClient?.signInWithProvider("github");
+                    }}
                   >
                     GitHub
                   </Button>
@@ -185,4 +194,5 @@ export const SignInView = () => {
     </motion.div>
   );
 };
+
 

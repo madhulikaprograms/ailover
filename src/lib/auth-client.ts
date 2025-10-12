@@ -41,6 +41,7 @@ export const authClient = {
     session.setUser(data.user);
     return data.user;
   },
+
   async signUp(name: string, email: string, password: string) {
     const res = await fetch("/api/auth/signup", {
       method: "POST",
@@ -55,7 +56,14 @@ export const authClient = {
     session.setUser(data.user);
     return data.user;
   },
+
   signOut() {
     session.clear();
+  },
+
+  // ✅ NEW: OAuth / social login (Google, GitHub, etc.)
+  async signInWithProvider(provider: "google" | "github") {
+    // This assumes your backend has routes like /api/auth/google or /api/auth/github
+    window.location.href = `/api/auth/${provider}`;
   },
 };
