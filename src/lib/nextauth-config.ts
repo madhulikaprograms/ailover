@@ -1,14 +1,8 @@
-// Temporarily disabled for demo - using simple mock auth instead
-// import { auth } from "@/lib/auth"; 
-// import { toNextJsHandler } from "better-auth/next-js";
-
-// export const { POST, GET } = toNextJsHandler(auth);
-
-import NextAuth from "next-auth";
+import type { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { mockUsers } from "@/lib/mock-users";
 
-const handler = NextAuth({
+const authConfig: NextAuthOptions = {
   providers: [
     Credentials({
       name: "Credentials",
@@ -19,14 +13,15 @@ const handler = NextAuth({
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
         const user = mockUsers.findByEmail(credentials.email);
-        if (!user) return null;
-        if (user.password !== credentials.password) return null;
+        if (!user || user.password !== credentials.password) return null;
         return { id: user.id, name: user.name, email: user.email };
       },
     }),
   ],
   session: { strategy: "jwt" },
   secret: process.env.NEXTAUTH_SECRET,
-});
+};
 
-export { handler as GET, handler as POST };
+export default authConfig;
+
+

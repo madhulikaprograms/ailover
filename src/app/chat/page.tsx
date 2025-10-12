@@ -73,27 +73,49 @@ export default function ChatPage() {
 
   return (
     <div className="mx-auto flex h-[100dvh] max-w-screen-md flex-col gap-3 p-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Demo Chat</h1>
+      <div className="flex items-center justify-between border-b pb-3">
+        <div className="flex items-center gap-3">
+          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-red-500 to-purple-600 flex items-center justify-center text-white font-semibold text-sm">
+            AI
+          </div>
+          <div>
+            <h1 className="text-xl font-semibold">AILOVER</h1>
+            <p className="text-sm text-muted-foreground">Your AI companion</p>
+          </div>
+        </div>
         <Button variant="outline" onClick={logout}>Log out</Button>
       </div>
-      <div ref={listRef} className="bg-muted flex-1 overflow-y-auto rounded-md p-3">
+      <div ref={listRef} className="bg-muted flex-1 overflow-y-auto rounded-md p-4 space-y-4">
         {messages.map((m) => (
-          <div key={m.id} className={`mb-2 flex ${m.sender === "user" ? "justify-end" : "justify-start"}`}>
-            <div className={`${m.sender === "user" ? "bg-blue-600 text-white" : "bg-white"} max-w-[75%] rounded-lg px-3 py-2 shadow`}>
-              {m.text}
+          <div key={m.id} className={`flex ${m.sender === "user" ? "justify-end" : "justify-start"}`}>
+            <div className={`flex items-start gap-2 max-w-[80%] ${m.sender === "user" ? "flex-row-reverse" : "flex-row"}`}>
+              {m.sender === "bot" && (
+                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-red-500 to-purple-600 flex items-center justify-center text-white font-semibold text-xs flex-shrink-0">
+                  AI
+                </div>
+              )}
+              <div className={`rounded-lg px-4 py-2 shadow-sm ${
+                m.sender === "user" 
+                  ? "bg-blue-600 text-white" 
+                  : "bg-white border"
+              }`}>
+                <p className="text-sm leading-relaxed">{m.text}</p>
+              </div>
             </div>
           </div>
         ))}
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 border-t pt-3">
         <Input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={onKeyDown}
-          placeholder="Type a message and hit Enter"
+          placeholder="Type a message..."
+          className="flex-1"
         />
-        <Button onClick={sendMessage}>Send</Button>
+        <Button onClick={sendMessage} disabled={!input.trim()}>
+          Send
+        </Button>
       </div>
     </div>
   );

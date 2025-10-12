@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { mockUsers } from "@/lib/mock-users";
 
 export async function POST(request: Request) {
   try {
@@ -9,11 +10,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: "Missing fields" }, { status: 400 });
     }
 
-    return NextResponse.json({
-      success: true,
-      user: { id: "1", name, email },
-    });
-  } catch (error) {
+    const user = mockUsers.addUser(name, email, password);
+    return NextResponse.json({ success: true, user });
+  } catch {
     return NextResponse.json({ success: false, error: "Invalid request" }, { status: 400 });
   }
 }

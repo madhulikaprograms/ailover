@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AILOVER - Phase 1 Foundation
 
-## Getting Started
+Deployable, styled, authentication-ready base built with Next.js App Router, TailwindCSS, shadcn/ui, Framer Motion, and NextAuth (Credentials) using mock users.
 
-First, run the development server:
+## Features
+
+- Routing: `/` → redirect to `/sign-in`, `/sign-in`, `/sign-up`, `/chat`, `/dashboard`, 404
+- UI: TailwindCSS + shadcn/ui, AILOVER brand colors, subtle motion
+- Auth: NextAuth Credentials with in-memory mock users
+- Guards: Middleware protects `/chat` and `/dashboard`
+- Mock API: `/api/auth/signin`, `/api/auth/signup`, `/api/chat`
+- Vercel-ready: `vercel.json`, production build scripts
+
+## Prerequisites
+
+- Node.js 18+
+- npm
+
+## Setup
+
+1) Install dependencies
+
+```bash
+npm install
+```
+
+2) Environment variables
+
+Create `.env.local` (see `.env.example`):
+
+```ini
+NEXTAUTH_SECRET=your-secret
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+# Optional for future integrations
+DATABASE_URL=
+OPENAI_API_KEY=
+```
+
+3) Run dev
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Authentication
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Credentials provider with mock users stored in-memory (`src/lib/mock-users.ts`).
+- Default demo user: `demo@ailover.app` / `password`.
+- Sign-up adds a user to the mock store then signs in.
 
-## Learn More
+Server-side redirect on `/auth/sign-in` when already authenticated.
+Middleware protects `/chat` and `/dashboard`.
 
-To learn more about Next.js, take a look at the following resources:
+## Build & Start
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run build
+npm run start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+```
+src/
+├── app/
+│   ├── api/
+│   │   ├── auth/[...all]/route.ts    # NextAuth (Credentials)
+│   │   ├── auth/signin/route.ts      # Mock sign-in JSON
+│   │   ├── auth/signup/route.ts      # Mock sign-up JSON
+│   │   └── chat/route.ts             # Mock chat
+│   ├── auth/sign-in/page.tsx         # SSR session redirect + UI
+│   ├── auth/sign-up/page.tsx         # UI + mock sign-up
+│   ├── chat/page.tsx                 # Chat placeholder
+│   ├── dashboard/page.tsx            # Protected placeholder
+│   ├── page.tsx                      # Redirect → /sign-in
+│   └── not-found.tsx
+├── lib/
+│   ├── mock-users.ts                 # In-memory users
+│   ├── nextauth-config.ts            # NextAuth options
+│   └── utils.ts
+├── modules/auth/ui/views/            # Auth forms (shadcn + motion)
+└── middleware.ts                     # Protects /chat and /dashboard
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment (Vercel)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Connect repo to Vercel
+- Add `NEXTAUTH_SECRET` in Vercel env
+- Deploy (build uses `npm run build`)
+
+## Notes
+
+- Phase 1 uses mock users and mock chat. Replace with real DB and providers in Phase 2.
